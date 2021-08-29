@@ -2,6 +2,8 @@ package com.reactnativefbreader;
 
 import android.graphics.Color;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 
@@ -28,6 +30,9 @@ public class FBReaderViewManager extends SimpleViewManager<View> {
     public static final String REACT_CLASS = "FBReaderView";
 
 
+    private TextWidget textWidget;
+    private ProgressBar progressBar;
+
     @Override
     @NonNull
     public String getName() {
@@ -36,8 +41,14 @@ public class FBReaderViewManager extends SimpleViewManager<View> {
 
     @Override
     @NonNull
-    public TextWidget createViewInstance(ThemedReactContext reactContext) {
-        TextWidget textWidget = new TextWidget(reactContext) {
+    public View createViewInstance(ThemedReactContext reactContext) {
+        FrameLayout frameLayout = new FrameLayout(reactContext);
+
+        progressBar = new ProgressBar(reactContext, null, android.R.attr.progressBarStyleLarge);
+        progressBar.setIndeterminate(true);
+        progressBar.setVisibility(View.GONE);
+
+        textWidget = new TextWidget(reactContext) {
             @Override
             protected TextBookController createController(Book book) {
                 return new TextBookControllerImpl(getContext(), book);
@@ -48,35 +59,49 @@ public class FBReaderViewManager extends SimpleViewManager<View> {
                 return new GestureListenerExt(this);
             }
         };
-        return textWidget;
+        frameLayout.addView(textWidget,
+                new FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.MATCH_PARENT
+                )
+        );
+        frameLayout.addView(progressBar,
+                new FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.MATCH_PARENT
+                )
+        );
+        return frameLayout;
     }
 
     @ReactProp(name = "background")
-    public void setBackground(TextWidget view, String value) {
-        final ColorProfile profile = view.colorProfile();
+    public void setBackground(View view, String value) {
+        final ColorProfile profile = textWidget.colorProfile();
         profile.wallpaper.setValue(String.format("wallpapers/%s.jpg", value));
     }
 
     @ReactProp(name = "textColor")
-    public void setTextColor(TextWidget view, String value) {
-        final ColorProfile profile = view.colorProfile();
+    public void setTextColor(View view, String value) {
+        final ColorProfile profile = textWidget.colorProfile();
         profile.regularText.setValue(Color.parseColor(value));
     }
 
     @ReactProp(name = "fontSize")
-    public void setFontSize(TextWidget view, Integer value) {
-        final BaseStyle baseStyle = view.baseStyle();
+    public void setFontSize(View view, Integer value) {
+        final BaseStyle baseStyle = textWidget.baseStyle();
         baseStyle.fontSize.setValue(value);
     }
 
     @ReactProp(name = "book")
-    public void setBook(TextWidget view, String value) {
-        final Book book = new Book(1L, Collections.singletonList(value), null, null, null);
+    public void setBook(View view, String value) {
+        final Book book = new Book(value.hashCode(), Collections.singletonList(value), null, null, null);
         if (!(new TextInterface(view.getContext())).readMetainfo(book)) {
 
         } else {
             try {
-                view.setBook(book);
+                progressBar.setVisibility(View.VISIBLE);
+                textWidget.setBook(book);
+                progressBar.setVisibility(View.GONE);
             } catch (BookException e) {
 
             }

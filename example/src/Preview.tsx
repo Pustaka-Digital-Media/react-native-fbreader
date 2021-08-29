@@ -10,7 +10,11 @@ type PreviewProps = {
 export default function Preview({navigation, route}: PreviewProps) {
   return (
     <View style={styles.container}>
-      <FBReaderView style={styles.box} book={route.params.path} />
+      <FBReaderView 
+        style={styles.box} 
+        book={route.params.path}
+        background="wood"
+      />
     </View>
   )
 }

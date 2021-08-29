@@ -11,11 +11,15 @@ npm install react-native-fbreader
 ## Usage
 
 ```js
-import Fbreader from "react-native-fbreader";
+import FBReaderView from "react-native-fbreader";
 
 // ...
 
-const result = await Fbreader.multiply(3, 7);
+<FBReaderView  
+  book={filePathToBook}
+  textColor="#333"
+  fontSize="20"
+  background="wood"/>
 ```
 
 ## Contributing
