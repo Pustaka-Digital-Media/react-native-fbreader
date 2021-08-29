@@ -5,7 +5,7 @@ RN plugin for FBReader SDK
 ## Installation
 
 ```sh
-npm install react-native-fbreader
+npm install https://github.com/bakhtiyork/react-native-fbreader.git
 ```
 
 ## Usage
