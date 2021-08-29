@@ -1,12 +1,14 @@
 import { requireNativeComponent, ViewStyle } from 'react-native';
 
-type FbreaderProps = {
-  color: string;
+type FBReaderProps = {
+  background?: string;
+  book?: string;
+  textColor?: string;
+  fontSize?: number;
   style: ViewStyle;
 };
 
-export const FbreaderViewManager = requireNativeComponent<FbreaderProps>(
-'FbreaderView'
-);
+export const FBReaderView =
+  requireNativeComponent<FBReaderProps>('FBReaderView');
 
-export default FbreaderViewManager;
+export default FBReaderView;

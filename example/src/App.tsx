@@ -1,12 +1,12 @@
 import * as React from 'react';
 
 import { StyleSheet, View } from 'react-native';
-import FbreaderViewManager from 'react-native-fbreader';
+import FBReaderView from 'react-native-fbreader';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <FbreaderViewManager color="#32a852" style={styles.box} />
+      <FBReaderView style={styles.box} />
     </View>
   );
 }

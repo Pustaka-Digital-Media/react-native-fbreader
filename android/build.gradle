@@ -43,16 +43,44 @@ android {
 }
 
 repositories {
+    maven {
+        url "https://sdk.fbreader.org/maven"
+    }
     mavenLocal()
     maven {
         // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
         url("$rootDir/../node_modules/react-native/android")
     }
     google()
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
+    ext {
+      fbreader_sdk_version='1.1.4'
+    }
+
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation "org.fbreader:book:$fbreader_sdk_version"
+    implementation "org.fbreader:config_client:$fbreader_sdk_version"
+    implementation "org.fbreader:config_provider:$fbreader_sdk_version"
+    implementation "org.fbreader:filesystem:$fbreader_sdk_version"
+    implementation "org.fbreader:fontentry:$fbreader_sdk_version"
+    implementation "org.fbreader:format_interface:$fbreader_sdk_version"
+    implementation "org.fbreader:image:$fbreader_sdk_version"
+    implementation "org.fbreader:intent:$fbreader_sdk_version"
+    implementation "org.fbreader:language:$fbreader_sdk_version"
+    implementation "org.fbreader:loader:$fbreader_sdk_version"
+    implementation "org.fbreader:options:$fbreader_sdk_version"
+    implementation "org.fbreader:text_client:$fbreader_sdk_version"
+    implementation "org.fbreader:text_info:$fbreader_sdk_version"
+    implementation "org.fbreader:text_provider:$fbreader_sdk_version"
+    implementation "org.fbreader:text_util:$fbreader_sdk_version"
+    implementation "org.fbreader:text_view:$fbreader_sdk_version"
+    implementation "org.fbreader:toc:$fbreader_sdk_version"
+    implementation "org.fbreader:util:$fbreader_sdk_version"
+    implementation "org.fbreader:view:$fbreader_sdk_version"
+    implementation "org.fbreader:vimgadgets:$fbreader_sdk_version"
+    implementation "org.fbreader:zip-amse:$fbreader_sdk_version"
 }
