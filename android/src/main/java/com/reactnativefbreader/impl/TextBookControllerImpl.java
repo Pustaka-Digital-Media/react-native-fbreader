@@ -13,6 +13,7 @@ import org.fbreader.text.FixedPosition;
 import org.fbreader.text.Position;
 import org.fbreader.text.widget.TextBookController;
 
+import java.util.Collections;
 import java.util.List;
 
 public class TextBookControllerImpl extends TextBookController {
@@ -27,7 +28,7 @@ public class TextBookControllerImpl extends TextBookController {
 
     @Override
     public List<HighlightingStyle> highlightingStyles() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -47,7 +48,7 @@ public class TextBookControllerImpl extends TextBookController {
 
     @Override
     public List<Bookmark> hiddenBookmarks() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

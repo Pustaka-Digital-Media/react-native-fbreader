@@ -62,6 +62,7 @@ dependencies {
 
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation "com.googlecode.json-simple:json-simple:1.1"
     implementation "org.fbreader:book:$fbreader_sdk_version"
     implementation "org.fbreader:config_client:$fbreader_sdk_version"
     implementation "org.fbreader:config_provider:$fbreader_sdk_version"

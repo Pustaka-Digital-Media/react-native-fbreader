@@ -1,25 +1,21 @@
 import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+const Stack = createNativeStackNavigator();
 
-import { StyleSheet, View } from 'react-native';
-import FBReaderView from 'react-native-fbreader';
+import BookList from './BookList';
+import Preview from './Preview';
+
 
 export default function App() {
+
   return (
-    <View style={styles.container}>
-      <FBReaderView style={styles.box} />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="BookList" component={BookList} />
+        <Stack.Screen name="Preview" component={Preview} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
-  },
-});

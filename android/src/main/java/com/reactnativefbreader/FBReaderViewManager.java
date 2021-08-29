@@ -12,6 +12,7 @@ import com.reactnativefbreader.impl.GestureListenerExt;
 import com.reactnativefbreader.impl.TextBookControllerImpl;
 
 import org.fbreader.book.Book;
+import org.fbreader.book.BookLoader;
 import org.fbreader.format.BookException;
 import org.fbreader.format.BookFormatException;
 import org.fbreader.text.TextInterface;
@@ -36,7 +37,7 @@ public class FBReaderViewManager extends SimpleViewManager<View> {
     @Override
     @NonNull
     public TextWidget createViewInstance(ThemedReactContext reactContext) {
-        return new TextWidget(reactContext) {
+        TextWidget textWidget = new TextWidget(reactContext) {
             @Override
             protected TextBookController createController(Book book) {
                 return new TextBookControllerImpl(getContext(), book);
@@ -47,6 +48,7 @@ public class FBReaderViewManager extends SimpleViewManager<View> {
                 return new GestureListenerExt(this);
             }
         };
+        return textWidget;
     }
 
     @ReactProp(name = "background")
