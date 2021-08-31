@@ -13,7 +13,8 @@ export default function Preview({navigation, route}: PreviewProps) {
       <FBReaderView 
         style={styles.box} 
         book={route.params.path}
-        background="wood"
+        background="hardpaper"
+        colorProfile="einkLight"
       />
     </View>
   )

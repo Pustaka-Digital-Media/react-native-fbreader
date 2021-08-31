@@ -12,6 +12,8 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.reactnativefbreader.impl.GestureListenerExt;
 import com.reactnativefbreader.impl.TextBookControllerImpl;
+import com.reactnativefbreader.impl.opener.ExternalHyperlinkOpener;
+import com.reactnativefbreader.impl.opener.InternalHyperlinkOpener;
 
 import org.fbreader.book.Book;
 import org.fbreader.book.BookLoader;
@@ -28,7 +30,6 @@ import java.util.Collections;
 
 public class FBReaderViewManager extends SimpleViewManager<View> {
     public static final String REACT_CLASS = "FBReaderView";
-
 
     private TextWidget textWidget;
     private ProgressBar progressBar;
@@ -49,6 +50,11 @@ public class FBReaderViewManager extends SimpleViewManager<View> {
         progressBar.setVisibility(View.GONE);
 
         textWidget = new TextWidget(reactContext) {
+            {
+                registerOpener(new InternalHyperlinkOpener(this));
+                registerOpener(new ExternalHyperlinkOpener(this));
+            }
+
             @Override
             protected TextBookController createController(Book book) {
                 return new TextBookControllerImpl(getContext(), book);
@@ -80,16 +86,22 @@ public class FBReaderViewManager extends SimpleViewManager<View> {
         profile.wallpaper.setValue(String.format("wallpapers/%s.jpg", value));
     }
 
-    @ReactProp(name = "textColor")
-    public void setTextColor(View view, String value) {
-        final ColorProfile profile = textWidget.colorProfile();
-        profile.regularText.setValue(Color.parseColor(value));
+    @ReactProp(name = "colorProfile")
+    public void setColorProfile(View view, String value) {
+        textWidget.setColorProfileName(value);
     }
 
     @ReactProp(name = "fontSize")
     public void setFontSize(View view, Integer value) {
         final BaseStyle baseStyle = textWidget.baseStyle();
         baseStyle.fontSize.setValue(value);
+    }
+
+    @ReactProp(name = "searchInText")
+    public void setSearchInText(View view, String value) {
+        if (value != null && !value.isEmpty()) {
+            textWidget.searchInText(value);
+        }
     }
 
     @ReactProp(name = "book")
