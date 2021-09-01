@@ -17,6 +17,7 @@ import {
   FBReaderCoverView
 } from "react-native-fbreader";
 
+...
 // epub rendering view
 <FBReaderView  
   book={filePathToBook}
@@ -24,11 +25,12 @@ import {
   fontSize="12"
   background="wood"/>
 
+...
 // epub cover view
 <FBReaderCoverView
   book={filePathToBook} />
 
-
+...
 // epub table of contents - JSON object
 let content = FBReader.tableOfContents(filePathToBook);
 ```
@@ -39,7 +41,7 @@ let content = FBReader.tableOfContents(filePathToBook);
 ```js
 type FBReaderViewProps = {
   background?: string; // hardpaper, leather, paper, sand, sepia, wood
-  book?: string;
+  book?: string; // path to ebook
   colorProfile?: string;
   fontSize?: number;
   searchInText?: string;
