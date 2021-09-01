@@ -1,6 +1,6 @@
 package com.reactnativefbreader;
 
-import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
@@ -10,25 +10,20 @@ import androidx.annotation.NonNull;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.reactnativefbreader.impl.GestureListenerExt;
-import com.reactnativefbreader.impl.TextBookControllerImpl;
-import com.reactnativefbreader.impl.opener.ExternalHyperlinkOpener;
-import com.reactnativefbreader.impl.opener.InternalHyperlinkOpener;
+import com.reactnativefbreader.impl.TextWidgetImpl;
 
 import org.fbreader.book.Book;
-import org.fbreader.book.BookLoader;
 import org.fbreader.format.BookException;
-import org.fbreader.format.BookFormatException;
+import org.fbreader.text.FixedPosition;
 import org.fbreader.text.TextInterface;
 import org.fbreader.text.view.style.BaseStyle;
-import org.fbreader.text.widget.TextBookController;
 import org.fbreader.text.widget.TextWidget;
+import org.fbreader.toc.TableOfContents;
 import org.fbreader.view.options.ColorProfile;
-import org.fbreader.widget.GestureListener;
 
 import java.util.Collections;
 
-public class FBReaderViewManager extends SimpleViewManager<View> {
+public class FBReaderViewManager extends SimpleViewManager<FrameLayout> {
     public static final String REACT_CLASS = "FBReaderView";
 
     private TextWidget textWidget;
@@ -42,29 +37,14 @@ public class FBReaderViewManager extends SimpleViewManager<View> {
 
     @Override
     @NonNull
-    public View createViewInstance(ThemedReactContext reactContext) {
+    public FrameLayout createViewInstance(@NonNull ThemedReactContext reactContext) {
         FrameLayout frameLayout = new FrameLayout(reactContext);
 
         progressBar = new ProgressBar(reactContext, null, android.R.attr.progressBarStyleLarge);
         progressBar.setIndeterminate(true);
         progressBar.setVisibility(View.GONE);
 
-        textWidget = new TextWidget(reactContext) {
-            {
-                registerOpener(new InternalHyperlinkOpener(this));
-                registerOpener(new ExternalHyperlinkOpener(this));
-            }
-
-            @Override
-            protected TextBookController createController(Book book) {
-                return new TextBookControllerImpl(getContext(), book);
-            }
-
-            @Override
-            protected GestureListener createGestureListener() {
-                return new GestureListenerExt(this);
-            }
-        };
+        textWidget = new TextWidgetImpl(reactContext);
         frameLayout.addView(textWidget,
                 new FrameLayout.LayoutParams(
                         FrameLayout.LayoutParams.MATCH_PARENT,
@@ -104,21 +84,23 @@ public class FBReaderViewManager extends SimpleViewManager<View> {
         }
     }
 
+    @ReactProp(name = "tocReference")
+    public void setTocReference(View view, Integer ref) {
+        if (ref != null) {
+            textWidget.jumpTo(new FixedPosition(ref, 0, 0));
+        }
+    }
+
     @ReactProp(name = "book")
     public void setBook(View view, String value) {
         final Book book = new Book(value.hashCode(), Collections.singletonList(value), null, null, null);
-        if (!(new TextInterface(view.getContext())).readMetainfo(book)) {
-
-        } else {
+        if ((new TextInterface(view.getContext())).readMetainfo(book)) {
             try {
                 progressBar.setVisibility(View.VISIBLE);
                 textWidget.setBook(book);
                 progressBar.setVisibility(View.GONE);
-            } catch (BookException e) {
-
-            }
+            } catch (BookException e) { }
         }
     }
-
 
 }

@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
-import FBReaderView from 'react-native-fbreader';
+import { useEffect  } from 'react';
+import { StyleSheet, View, Button } from 'react-native';
+import { FBReaderView } from 'react-native-fbreader';
+import { useNavigation } from '@react-navigation/native'
 
 type PreviewProps = {
   navigation: any,
@@ -8,6 +10,14 @@ type PreviewProps = {
 }
 
 export default function Preview({navigation, route}: PreviewProps) {
+  const nav = useNavigation();
+  useEffect(() => {
+    nav.setOptions({
+      headerRight: () => <Button title="TOC" onPress={()=>{
+        navigation.navigate('TableOfContents', {path: route.params.path})
+      }} />,
+    });
+  })
   return (
     <View style={styles.container}>
       <FBReaderView 

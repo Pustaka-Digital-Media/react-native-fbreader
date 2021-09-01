@@ -1,15 +1,36 @@
-import { requireNativeComponent, ViewStyle } from 'react-native';
+import { requireNativeComponent, ViewStyle, NativeModules } from 'react-native';
 
-type FBReaderProps = {
+const _FBReader = NativeModules.FBReader;
+
+type FBReaderViewProps = {
   background?: string;
   book?: string;
   colorProfile?: string;
   fontSize?: number;
   searchInText?: string;
-  style: ViewStyle;
+  tocReference?: number;
+  style?: ViewStyle;
 };
 
 export const FBReaderView =
-  requireNativeComponent<FBReaderProps>('FBReaderView');
+  requireNativeComponent<FBReaderViewProps>('FBReaderView');
 
-export default FBReaderView;
+type FBReaderCoverViewProps = {
+  book?: string;
+  style?: ViewStyle;
+}
+
+export const FBReaderCoverView =
+  requireNativeComponent<FBReaderCoverViewProps>('FBReaderCoverView');
+
+class FBReaderImpl {
+  constructor() {}
+
+  async tableOfContents(book: string) {
+    return await _FBReader.tableOfContents(book);
+  }
+}
+
+export const FBReader = new FBReaderImpl();
+
+export default { FBReader, FBReaderView, FBReaderCoverView };
