@@ -11,7 +11,7 @@ export default function BookList({ navigation }) {
   useEffect(() => {
     let exec = async () => {
       updateBooks(documentDirectoryPath);
-   }
+    }
     exec();
   }, []);
 
@@ -28,7 +28,6 @@ export default function BookList({ navigation }) {
       fromUrl: url,
       toFile: destinationPath,
     };
-    console.log(destinationPath);
     let response = await RNFS.downloadFile(options);
     response.promise.then(async res => {
       console.log(res);

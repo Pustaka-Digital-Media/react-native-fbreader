@@ -62,19 +62,25 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> {
 
     @ReactProp(name = "background")
     public void setBackground(View view, String value) {
-        final ColorProfile profile = textWidget.colorProfile();
-        profile.wallpaper.setValue(String.format("wallpapers/%s.jpg", value));
+        if (value != null) {
+            final ColorProfile profile = textWidget.colorProfile();
+            profile.wallpaper.setValue(String.format("wallpapers/%s.jpg", value));
+        }
     }
 
     @ReactProp(name = "colorProfile")
     public void setColorProfile(View view, String value) {
-        textWidget.setColorProfileName(value);
+        if (value != null) {
+            textWidget.setColorProfileName(value);
+        }
     }
 
     @ReactProp(name = "fontSize")
     public void setFontSize(View view, Integer value) {
-        final BaseStyle baseStyle = textWidget.baseStyle();
-        baseStyle.fontSize.setValue(value);
+        if (value != null) {
+            final BaseStyle baseStyle = textWidget.baseStyle();
+            baseStyle.fontSize.setValue(value);
+        }
     }
 
     @ReactProp(name = "searchInText")
@@ -91,8 +97,16 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> {
         }
     }
 
+    @ReactProp(name = "page")
+    public void setPage(View view, Integer value) {
+        if (value != null) {
+            textWidget.gotoPage(value);
+        }
+    }
+
     @ReactProp(name = "book")
     public void setBook(View view, String value) {
+        if (value == null) return;
         final Book book = new Book(value.hashCode(), Collections.singletonList(value), null, null, null);
         if ((new TextInterface(view.getContext())).readMetainfo(book)) {
             try {

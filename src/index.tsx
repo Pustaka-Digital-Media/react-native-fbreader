@@ -9,6 +9,7 @@ type FBReaderViewProps = {
   fontSize?: number;
   searchInText?: string;
   tocReference?: number;
+  page?: number;
   style?: ViewStyle;
 };
 
