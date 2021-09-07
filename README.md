@@ -104,6 +104,33 @@ import RNFS from 'react-native-fs';
 
 ```
 
+## Events
+There is a single `FBReaderViewContentUpdateEvent` event emitted via `DeviceEventEmitter` which sends current page and total pages.
+```js
+  const nav = useNavigation();
+  useEffect(() => {
+    DeviceEventEmitter.addListener('FBReaderViewContentUpdateEvent', (map: any) => {
+      nav.setOptions({
+        title: `Page ${map.page}, Total: ${map.total}`
+      })
+    });
+  })
+
+```
+
+## FBReader license key
+To provide license key for Android app add to your app `gradle.build` file:
+```
+...
+buildTypes {
+  ...
+  all {
+    resValue 'string', 'fbreader_sdk_key', '<put your fbreader sdk key here>'
+  }
+}
+...
+```
+
 ## License
 
 PRIVATE

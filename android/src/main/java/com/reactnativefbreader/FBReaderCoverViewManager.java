@@ -2,7 +2,6 @@ package com.reactnativefbreader;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -12,7 +11,6 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 import org.fbreader.book.Book;
-import org.fbreader.format.BookException;
 import org.fbreader.image.StreamImage;
 import org.fbreader.text.TextInterface;
 import org.fbreader.text.info.CoverHelper;

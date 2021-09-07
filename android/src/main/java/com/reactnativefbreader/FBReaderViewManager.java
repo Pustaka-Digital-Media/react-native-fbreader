@@ -1,12 +1,14 @@
 package com.reactnativefbreader;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -17,16 +19,14 @@ import org.fbreader.format.BookException;
 import org.fbreader.text.FixedPosition;
 import org.fbreader.text.TextInterface;
 import org.fbreader.text.view.style.BaseStyle;
-import org.fbreader.text.widget.TextWidget;
-import org.fbreader.toc.TableOfContents;
 import org.fbreader.view.options.ColorProfile;
 
 import java.util.Collections;
 
-public class FBReaderViewManager extends SimpleViewManager<FrameLayout> {
+public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implements TextWidgetImpl.TextWidgetListener {
     public static final String REACT_CLASS = "FBReaderView";
 
-    private TextWidget textWidget;
+    private TextWidgetImpl textWidget;
     private ProgressBar progressBar;
 
     @Override
@@ -45,6 +45,7 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> {
         progressBar.setVisibility(View.GONE);
 
         textWidget = new TextWidgetImpl(reactContext);
+        textWidget.setTextWidgetListener(this);
         frameLayout.addView(textWidget,
                 new FrameLayout.LayoutParams(
                         FrameLayout.LayoutParams.MATCH_PARENT,
@@ -113,8 +114,16 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> {
                 progressBar.setVisibility(View.VISIBLE);
                 textWidget.setBook(book);
                 progressBar.setVisibility(View.GONE);
-            } catch (BookException e) { }
+            } catch (BookException e) {
+            }
         }
     }
 
+    @Override
+    public void onContentUpdated(WritableMap map) {
+        ReactContext reactContext = (ReactContext) textWidget.getContext();
+        reactContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit("FBReaderViewContentUpdateEvent", map);
+    }
 }

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect  } from 'react';
-import { StyleSheet, View, Button } from 'react-native';
+import { StyleSheet, View, Button, DeviceEventEmitter } from 'react-native';
 import { FBReaderView } from 'react-native-fbreader';
 import { useNavigation } from '@react-navigation/native'
 
@@ -16,6 +16,11 @@ export default function Preview({navigation, route}: PreviewProps) {
       headerRight: () => <Button title="TOC" onPress={()=>{
         navigation.navigate('TableOfContents', {path: route.params.path})
       }} />,
+    });
+    DeviceEventEmitter.addListener('FBReaderViewContentUpdateEvent', (map: any) => {
+      nav.setOptions({
+        title: `Page ${map.page}`
+      })
     });
   })
   return (
