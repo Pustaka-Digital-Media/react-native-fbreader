@@ -78,6 +78,19 @@ viewRef.current.setNativeProps({
 
 ```
 
+**fontSize** sample using states:
+```javascript
+
+const [fontSize, setFontSize] = useState(10);
+
+...
+
+<FBReaderView fontSize={fontSize} />
+
+<Button title="Increase Font Size" onPress={ ()=>{ setFontSize(fontSize + 2) } } />
+<Button title="Decrease Font Size" onPress={ ()=>{ setFontSize(fontSize - 2) } } />
+```
+
 ## Download eBooks
 It seems that `react-native-fs` is most convenient way to download **epub** files, but you can use any other alternative way to do it (`axios`, etc).
 
