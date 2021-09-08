@@ -66,6 +66,8 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implemen
         if (value != null) {
             final ColorProfile profile = textWidget.colorProfile();
             profile.wallpaper.setValue(String.format("wallpapers/%s.jpg", value));
+            textWidget.clearTextCaches();
+            textWidget.invalidate();
         }
     }
 
@@ -73,6 +75,8 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implemen
     public void setColorProfile(View view, String value) {
         if (value != null) {
             textWidget.setColorProfileName(value);
+            textWidget.clearTextCaches();
+            textWidget.invalidate();
         }
     }
 
@@ -81,6 +85,8 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implemen
         if (value != null) {
             final BaseStyle baseStyle = textWidget.baseStyle();
             baseStyle.fontSize.setValue(value);
+            textWidget.clearTextCaches();
+            textWidget.invalidate();
         }
     }
 
@@ -88,6 +94,8 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implemen
     public void setSearchInText(View view, String value) {
         if (value != null && !value.isEmpty()) {
             textWidget.searchInText(value);
+            textWidget.clearTextCaches();
+            textWidget.invalidate();
         }
     }
 
@@ -95,6 +103,8 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implemen
     public void setTocReference(View view, Integer ref) {
         if (ref != null) {
             textWidget.jumpTo(new FixedPosition(ref, 0, 0));
+            textWidget.clearTextCaches();
+            textWidget.invalidate();
         }
     }
 
@@ -102,6 +112,8 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implemen
     public void setPage(View view, Integer value) {
         if (value != null) {
             textWidget.gotoPage(value);
+            textWidget.clearTextCaches();
+            textWidget.invalidate();
         }
     }
 
