@@ -63,7 +63,7 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implemen
 
     @ReactProp(name = "background")
     public void setBackground(View view, String value) {
-        if (value != null) {
+        if (value != null && !value.isEmpty()) {
             final ColorProfile profile = textWidget.colorProfile();
             profile.wallpaper.setValue(String.format("wallpapers/%s.jpg", value));
             textWidget.clearTextCaches();
@@ -73,7 +73,7 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implemen
 
     @ReactProp(name = "colorProfile")
     public void setColorProfile(View view, String value) {
-        if (value != null) {
+        if (value != null && !value.isEmpty()) {
             textWidget.setColorProfileName(value);
             textWidget.clearTextCaches();
             textWidget.invalidate();
@@ -119,7 +119,7 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implemen
 
     @ReactProp(name = "book")
     public void setBook(View view, String value) {
-        if (value == null) return;
+        if (value == null || value.isEmpty()) return;
         final Book book = new Book(value.hashCode(), Collections.singletonList(value), null, null, null);
         if ((new TextInterface(view.getContext())).readMetainfo(book)) {
             try {

@@ -53,8 +53,9 @@ public class FBReaderManager extends ReactContextBaseJavaModule {
                 try {
                     textWidget.setBook(book);
                     TableOfContents toc = textWidget.tableOfContents();
+                    HashMap<Integer, Integer> pageMap = textWidget.pageMap(toc);
                     if (toc != null && toc.root != null) {
-                        promise.resolve(toJSONObject(toc.root));
+                        promise.resolve(toJSONObject(toc.root, pageMap));
                         return;
                     }
                 } catch (BookException e) {
@@ -64,7 +65,7 @@ public class FBReaderManager extends ReactContextBaseJavaModule {
         promise.resolve(Arguments.createMap());
     }
 
-    private static WritableMap toJSONObject(TOCTree tree) {
+    private static WritableMap toJSONObject(TOCTree tree, HashMap<Integer, Integer> pageMap) {
         WritableMap map = Arguments.createMap();
         if (tree.Text != null) {
             map.putString("text", tree.Text);
@@ -72,13 +73,16 @@ public class FBReaderManager extends ReactContextBaseJavaModule {
 
         if (tree.Reference != null) {
             map.putInt("ref", tree.Reference);
+            if (pageMap.containsKey(tree.Reference)) {
+                map.putInt("page", pageMap.get(tree.Reference));
+            }
         }
 
         if (tree.hasChildren()) {
             List<TOCTree> children = tree.subtrees();
             WritableArray lst = Arguments.createArray();
             for (TOCTree child : children) {
-                lst.pushMap(toJSONObject(child));
+                lst.pushMap(toJSONObject(child, pageMap));
             }
             map.putArray("children", lst);
         }

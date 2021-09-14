@@ -118,7 +118,7 @@ import RNFS from 'react-native-fs';
 ```
 
 ## Events
-There is a single `FBReaderViewContentUpdateEvent` event emitted via `DeviceEventEmitter` which sends current page and total pages.
+There is a single `FBReaderViewContentUpdateEvent` event emitted via `DeviceEventEmitter` which sends current page, total pages and chapter info.
 ```js
   const nav = useNavigation();
   useEffect(() => {
@@ -130,6 +130,14 @@ There is a single `FBReaderViewContentUpdateEvent` event emitted via `DeviceEven
   })
 
 ```
+Chapter info is list of current chapter hierarchy ordered by level (subtitle x -> subtitle y -> ... -> root), e.g:
+```
+{"chapter":[{"level":1,"name":"II The Pool of Tears"},{"level":0,"name":"..."}]
+```
+means:
+* Level 1 chapter "II Pool of Tears"
+* Level 0 chapter - root of TOC.
+
 
 ## FBReader license key
 To provide license key for Android app add to your app `gradle.build` file:
