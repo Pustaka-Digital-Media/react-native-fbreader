@@ -12,8 +12,7 @@ const TableOfContents = ({route}: TableOfContentsProps) => {
   const [toc, setToc] = useState("");
   useEffect(() => {
     const updateToc = async () => {
-      let value = await FBReader.tableOfContents("/storage/emulated/0/Android/data/com.example.reactnativefbreader/files/TOC");
-      
+      let value = await FBReader.tableOfContents(route.params.path);
       setToc(JSON.stringify(value));
     };
     updateToc();

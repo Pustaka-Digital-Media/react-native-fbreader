@@ -1,8 +1,5 @@
 package com.reactnativefbreader;
 
-import android.util.Log;
-import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -11,8 +8,6 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.reactnativefbreader.impl.TextWidgetImpl;
@@ -24,12 +19,9 @@ import org.fbreader.text.widget.TextWidget;
 import org.fbreader.toc.TOCTree;
 import org.fbreader.toc.TableOfContents;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class FBReaderManager extends ReactContextBaseJavaModule {
     public static final String REACT_CLASS = "FBReader";
@@ -47,10 +39,21 @@ public class FBReaderManager extends ReactContextBaseJavaModule {
     @ReactMethod
     public void tableOfContents(String path, Promise promise) {
         if (getCurrentActivity() != null) {
-            TextWidget textWidget = new TextWidgetImpl(getCurrentActivity());
             final Book book = new Book(path.hashCode(), Collections.singletonList(path), null, null, null);
             if ((new TextInterface(getCurrentActivity())).readMetainfo(book)) {
                 try {
+                    TextWidget textWidget = null;
+                    TextWidget currentWidget = FBReaderViewManager.getCurrentWidget();
+                    if (currentWidget != null) {
+                        Book currentBook = currentWidget.book();
+                        if (currentBook.getId() == book.getId()) {
+                            textWidget = currentWidget;
+                        }
+                    }
+
+                    if (textWidget == null){
+                        textWidget = new TextWidgetImpl(getCurrentActivity());
+                    }
                     textWidget.setBook(book);
                     TableOfContents toc = textWidget.tableOfContents();
                     HashMap<Integer, Integer> pageMap = textWidget.pageMap(toc);

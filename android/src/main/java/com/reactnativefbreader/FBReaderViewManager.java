@@ -1,10 +1,12 @@
 package com.reactnativefbreader;
 
+import android.graphics.Rect;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
@@ -19,12 +21,25 @@ import org.fbreader.format.BookException;
 import org.fbreader.text.FixedPosition;
 import org.fbreader.text.TextInterface;
 import org.fbreader.text.view.style.BaseStyle;
+import org.fbreader.text.widget.TextWidget;
 import org.fbreader.view.options.ColorProfile;
 
+import java.lang.ref.WeakReference;
 import java.util.Collections;
 
-public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implements TextWidgetImpl.TextWidgetListener {
+public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implements TextWidgetImpl.TextWidgetListener, View.OnLayoutChangeListener {
     public static final String REACT_CLASS = "FBReaderView";
+
+    private static WeakReference<TextWidget> weakReference;
+
+    @Nullable
+    public static TextWidget getCurrentWidget() {
+        WeakReference<TextWidget> ref = weakReference;
+        if (ref != null) {
+            return ref.get();
+        }
+        return null;
+    }
 
     private TextWidgetImpl textWidget;
     private ProgressBar progressBar;
@@ -46,6 +61,7 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implemen
 
         textWidget = new TextWidgetImpl(reactContext);
         textWidget.setTextWidgetListener(this);
+        textWidget.addOnLayoutChangeListener(this);
         frameLayout.addView(textWidget,
                 new FrameLayout.LayoutParams(
                         FrameLayout.LayoutParams.MATCH_PARENT,
@@ -58,6 +74,7 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implemen
                         FrameLayout.LayoutParams.MATCH_PARENT
                 )
         );
+        weakReference = new WeakReference<>(textWidget);
         return frameLayout;
     }
 
@@ -137,5 +154,12 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implemen
         reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit("FBReaderViewContentUpdateEvent", map);
+    }
+
+    @Override
+    public void onLayoutChange(View view, int l, int t, int r, int b, int i4, int i5, int i6, int i7) {
+        Rect rect = new Rect(l, t, r, b);
+        rect.width();
+        rect.height();
     }
 }
