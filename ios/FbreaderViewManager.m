@@ -1,34 +1,20 @@
-#import <React/RCTViewManager.h>
+#import "React/RCTViewManager.h"
 
-@interface FbreaderViewManager : RCTViewManager
-@end
+@interface RCT_EXTERN_MODULE(FBReaderViewManager, RCTViewManager)
 
-@implementation FbreaderViewManager
+RCT_EXPORT_VIEW_PROPERTY(book, NSString)
 
-RCT_EXPORT_MODULE(FbreaderView)
+RCT_EXPORT_VIEW_PROPERTY(background, NSString)
 
-- (UIView *)view
-{
-  return [[UIView alloc] init];
-}
+RCT_EXPORT_VIEW_PROPERTY(colorProfile, NSString)
 
-RCT_CUSTOM_VIEW_PROPERTY(color, NSString, UIView)
-{
-  [view setBackgroundColor:[self hexStringToColor:json]];
-}
+RCT_EXPORT_VIEW_PROPERTY(fontSize, NSInteger)
 
-- hexStringToColor:(NSString *)stringToConvert
-{
-  NSString *noHashString = [stringToConvert stringByReplacingOccurrencesOfString:@"#" withString:@""];
-  NSScanner *stringScanner = [NSScanner scannerWithString:noHashString];
+RCT_EXPORT_VIEW_PROPERTY(searchInText, NSString)
 
-  unsigned hex;
-  if (![stringScanner scanHexInt:&hex]) return nil;
-  int r = (hex >> 16) & 0xFF;
-  int g = (hex >> 8) & 0xFF;
-  int b = (hex) & 0xFF;
+RCT_EXPORT_VIEW_PROPERTY(tocReference, NSInteger)
 
-  return [UIColor colorWithRed:r / 255.0f green:g / 255.0f blue:b / 255.0f alpha:1.0f];
-}
+RCT_EXPORT_VIEW_PROPERTY(page, NSInteger)
+
 
 @end

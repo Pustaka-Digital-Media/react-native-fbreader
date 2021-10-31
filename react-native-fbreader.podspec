@@ -13,7 +13,10 @@ Pod::Spec.new do |s|
   s.platforms    = { :ios => "10.0" }
   s.source       = { :git => "https://github.com/bakhtiyork/react-native-fbreader.git", :tag => "#{s.version}" }
 
-  s.source_files = "ios/**/*.{h,m,mm}"
+  s.source_files = "ios/**/*.{h,m,mm,swift}"
+  
+  s.resources = ["defaults/*"]
 
   s.dependency "React-Core"
+  s.dependency "FBReaderSDK"
 end
