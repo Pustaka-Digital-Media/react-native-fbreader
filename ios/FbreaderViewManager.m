@@ -16,5 +16,10 @@ RCT_EXPORT_VIEW_PROPERTY(tocReference, NSInteger)
 
 RCT_EXPORT_VIEW_PROPERTY(page, NSInteger)
 
+@end
+
+@interface RCT_EXTERN_MODULE(FBReaderCoverViewManager, RCTViewManager)
+
+RCT_EXPORT_VIEW_PROPERTY(book, NSString)
 
 @end

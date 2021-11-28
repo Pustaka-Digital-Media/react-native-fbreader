@@ -152,6 +152,32 @@ buildTypes {
 ...
 ```
 
+## iOS Setup
+Go to iOS project folder:
+```
+cd ios
+```
+Edit Podfile file:
+* Comment out Flipper usage
+* Add new pod dependency
+```
+pod 'FBReaderSDK', :git => 'https://sdk.fbreader.org/git/FBReaderSDK.git'
+```
+
+And install all Cocoapods dependencies:
+```
+pod install
+```
+
+Open your Xcode workspace project:
+```
+open <your project>.xcworkspace
+```
+
+Copy and paste from sample iOS Xcode workspace project to your Xcode workspace project:
+* `defaults` file folder
+* `backgroud` image folder in `Images.xcassets` to your project `Images.xcassets`
+
 ## License
 
 PRIVATE

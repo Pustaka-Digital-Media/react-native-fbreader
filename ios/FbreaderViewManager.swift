@@ -34,11 +34,45 @@ class TextBookDataHolderImpl: TextBookDataHolder {
   }
 }
 
+@objc(FBReaderCoverViewManager)
+class FBReaderCoverViewManager: RCTViewManager {
+
+  override func view() -> (FBReaderCoverView) {
+    return FBReaderCoverView()
+  }
+  
+  @objc override static func requiresMainQueueSetup() -> Bool {
+      return false
+  }
+}
+
+class FBReaderCoverView: UIImageView {
+  @objc var book: String = "" {
+    didSet {
+      let documentsDirectory = FBReaderView.getDocumentsDirectory()
+      let bookPath = book.starts(with: documentsDirectory) ? String(book[documentsDirectory.endIndex..<book.endIndex]) : book
+
+      let widget = TextWidget()
+      if let book = BookLoader.book(from: bookPath, embedded: false) {
+        widget.open(book: book, withProgressIndicator: nil) {
+          success in
+          if let coverData = book.coverData, let image = UIImage(data: coverData) {
+            self.image = image
+          }
+        }
+      }
+    }
+  }
+}
+
 
 @objc(FBReaderViewManager)
 class FBReaderViewManager: RCTViewManager {
 
   override func view() -> (FBReaderView) {
+    Options.loadDefaults()
+    FBReaderView.setDefaults("day", forKey: "colorProfile")
+    FBReaderView.setDefaults("wood", forKey: "night:textBgPattern")
     return FBReaderView()
   }
   
@@ -49,12 +83,18 @@ class FBReaderViewManager: RCTViewManager {
 
 class FBReaderView : UIView, TextWidgetDelegate {
   private var textWidget: TextWidget? = nil
+  
+  override func layoutSublayers(of layer: CALayer) {
+    super.layoutSublayers(of: layer)
+    if let widget = getTextWidget() {
+      widget.frame = self.bounds
+    }
+  }
 
+  // MARK:- Properties
   @objc var book: String = "" {
     didSet {
-      Options.loadDefaults()
-      
-      let documentsDirectory = getDocumentsDirectory()
+      let documentsDirectory = FBReaderView.getDocumentsDirectory()
       let bookPath = book.starts(with: documentsDirectory) ? String(book[documentsDirectory.endIndex..<book.endIndex]) : book
 
       if let widget = getTextWidget(), let book = BookLoader.book(from: bookPath, embedded: false) {
@@ -70,7 +110,7 @@ class FBReaderView : UIView, TextWidgetDelegate {
   @objc var background = "" {
     didSet {
       if let widget = getTextWidget() {
-        // TODO
+        FBReaderView.setDefaults(background, forKey: "day:textBgPattern")
         widget.forceUpdateTextParams()
         widget.rebuildPaintInfo()
         widget.setNeedsDisplay()
@@ -111,7 +151,7 @@ class FBReaderView : UIView, TextWidgetDelegate {
   @objc var tocReference = 0 {
     didSet {
       if let widget = getTextWidget() {
-        
+        let _ = widget.goto(position: TextFixedPosition(para: tocReference, element: 0, char: 0))
       }
     }
   }
@@ -119,21 +159,13 @@ class FBReaderView : UIView, TextWidgetDelegate {
   @objc var page = 0 {
     didSet {
       if let widget = getTextWidget() {
-        widget.goto(pageNo: page)
+        let _ = widget.goto(pageNo: page)
       }
     }
   }
   
-  override func layoutSublayers(of layer: CALayer) {
-    super.layoutSublayers(of: layer)
-    if let widget = getTextWidget() {
-      widget.frame = self.bounds
-      widget.backgroundColor = UIColor.red
-      self.backgroundColor = UIColor.green
-    }
-  }
-  
-  func getTextWidget() -> TextWidget? {
+  // MARK:- Private methods
+  private func getTextWidget() -> TextWidget? {
     if textWidget == nil {
       textWidget = TextWidget()
       textWidget?.delegate = self
@@ -143,14 +175,25 @@ class FBReaderView : UIView, TextWidgetDelegate {
     return textWidget
   }
   
-  func getDocumentsDirectory() -> String {
+  static func getDocumentsDirectory() -> String {
     let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
     let documentsDirectory = paths[0]
     return documentsDirectory.path
   }
   
+  static func setDefaults(_ value: Int, forKey key: String) {
+    UserDefaults.standard.set(value, forKey: key)
+  }
+  
+  static func setDefaults(_ value: String, forKey key: String) {
+    UserDefaults.standard.set(value, forKey: key)
+  }
+  
+  static func setDefaults(_ value: Bool, forKey key: String) {
+    UserDefaults.standard.set(value, forKey: key)
+  }
 
-//
+  // MARK:- TextWidgetDelegate
   func onTap(_ pt: CGPoint) {
     if let widget = getTextWidget() {
       if pt.x <= widget.frame.width / 2 {
@@ -163,6 +206,7 @@ class FBReaderView : UIView, TextWidgetDelegate {
   
   func onSelectionChanged(_ pt: CGPoint) {
   }
+  
   func onSelectionCleared() {
   }
 
