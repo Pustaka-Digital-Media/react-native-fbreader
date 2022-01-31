@@ -152,6 +152,16 @@ buildTypes {
 ...
 ```
 
+## Android Setup
+Add to your `android/build.gradle` file in `allprojects\repositories` section new maven URL `https://sdk.fbreader.org/maven`:
+```
+allprojects {
+    repositories {
+        maven {
+            url "https://sdk.fbreader.org/maven"
+        }
+```
+
 ## iOS Setup
 Go to iOS project folder:
 ```
