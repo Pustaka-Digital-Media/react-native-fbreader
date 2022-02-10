@@ -188,6 +188,8 @@ Copy and paste from sample iOS Xcode workspace project to your Xcode workspace p
 * `defaults` file folder
 * `backgroud` image folder in `Images.xcassets` to your project `Images.xcassets`
 
+**LICENSE KEY**: Put your key into into Info.plist file with key 'fbreader_sdk_key'.
+
 ## License
 
 PRIVATE
