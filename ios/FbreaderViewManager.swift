@@ -111,6 +111,7 @@ class FBReaderView : UIView, TextWidgetDelegate {
     didSet {
       if let widget = getTextWidget() {
         FBReaderView.setDefaults(background, forKey: "day:textBgPattern")
+        FBReaderView.setDefaults(background, forKey: "night:textBgPattern")
         widget.forceUpdateTextParams()
         widget.rebuildPaintInfo()
         widget.setNeedsDisplay()
