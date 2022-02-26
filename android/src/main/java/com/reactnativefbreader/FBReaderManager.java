@@ -46,7 +46,7 @@ public class FBReaderManager extends ReactContextBaseJavaModule {
                     TextWidget currentWidget = FBReaderViewManager.getCurrentWidget();
                     if (currentWidget != null) {
                         Book currentBook = currentWidget.book();
-                        if (currentBook.getId() == book.getId()) {
+                        if (currentBook != null && currentBook.getId() == book.getId()) {
                             textWidget = currentWidget;
                         }
                     }
