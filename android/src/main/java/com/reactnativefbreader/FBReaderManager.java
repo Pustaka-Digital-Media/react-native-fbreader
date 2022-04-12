@@ -56,7 +56,9 @@ public class FBReaderManager extends ReactContextBaseJavaModule {
                     }
                     textWidget.setBook(book);
                     TableOfContents toc = textWidget.tableOfContents();
-                    HashMap<Integer, Integer> pageMap = textWidget.pageMap(toc);
+                    if (textWidget.pageMap(toc)) {
+                      HashMap<Integer, Integer> pageMap = textWidget.pageMap(toc);
+                    }
                     if (toc != null && toc.root != null) {
                         promise.resolve(toJSONObject(toc.root, pageMap));
                         return;
