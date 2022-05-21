@@ -149,13 +149,6 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implemen
         }
     }
 
-    @ReactMethod
-    public void goToPage(Integer value) {
-      textWidget.gotoPage(value);
-      textWidget.clearTextCaches();
-      textWidget.invalidate();
-    }
-
     @Override
     public void onContentUpdated(WritableMap map) {
         ReactContext reactContext = (ReactContext) textWidget.getContext();

@@ -24,74 +24,102 @@ import java.util.HashMap;
 import java.util.List;
 
 public class FBReaderManager extends ReactContextBaseJavaModule {
-    public static final String REACT_CLASS = "FBReader";
+  public static final String REACT_CLASS = "FBReader";
 
-    public FBReaderManager(@Nullable ReactApplicationContext reactContext) {
-        super(reactContext);
-    }
+  public FBReaderManager(@Nullable ReactApplicationContext reactContext) {
+    super(reactContext);
+  }
 
-    @NonNull
-    @Override
-    public String getName() {
-        return REACT_CLASS;
-    }
+  @NonNull
+  @Override
+  public String getName() {
+    return REACT_CLASS;
+  }
 
-    @ReactMethod
-    public void tableOfContents(String path, Promise promise) {
-        if (getCurrentActivity() != null) {
-            final Book book = new Book(path.hashCode(), Collections.singletonList(path), null, null, null);
-            if ((new TextInterface(getCurrentActivity())).readMetainfo(book)) {
-                try {
-                    TextWidget textWidget = null;
-                    TextWidget currentWidget = FBReaderViewManager.getCurrentWidget();
-                    if (currentWidget != null) {
-                        Book currentBook = currentWidget.book();
-                        if (currentBook != null && currentBook.getId() == book.getId()) {
-                            textWidget = currentWidget;
-                        }
-                    }
-
-                    if (textWidget == null){
-                        textWidget = new TextWidgetImpl(getCurrentActivity());
-                    }
-                    textWidget.setBook(book);
-                    TableOfContents toc = textWidget.tableOfContents();
-                    if (toc != null) {
-                        HashMap<Integer, Integer> pageMap = textWidget.pageMap(toc);
-                        if (toc.root != null) {
-                            promise.resolve(toJSONObject(toc.root, pageMap));
-                            return;
-                        }
-                    }
-                } catch (Exception ignored) {
-                }
+  @ReactMethod
+  public void tableOfContents(String path, Promise promise) {
+    if (getCurrentActivity() != null) {
+      final Book book = new Book(path.hashCode(), Collections.singletonList(path), null, null, null);
+      if ((new TextInterface(getCurrentActivity())).readMetainfo(book)) {
+        try {
+          TextWidget textWidget = null;
+          TextWidget currentWidget = FBReaderViewManager.getCurrentWidget();
+          if (currentWidget != null) {
+            Book currentBook = currentWidget.book();
+            if (currentBook != null && currentBook.getId() == book.getId()) {
+              textWidget = currentWidget;
             }
-        }
-        promise.resolve(Arguments.createMap());
+          }
+
+          if (textWidget == null) {
+            textWidget = new TextWidgetImpl(getCurrentActivity());
+          }
+          textWidget.setBook(book);
+          TableOfContents toc = textWidget.tableOfContents();
+          if (toc != null) {
+            HashMap < Integer, Integer > pageMap = textWidget.pageMap(toc);
+            if (toc.root != null) {
+              promise.resolve(toJSONObject(toc.root, pageMap));
+              return;
+            }
+          }
+        } catch (Exception ignored) {}
+      }
+    }
+    promise.resolve(Arguments.createMap());
+  }
+
+  @ReactMethod
+  public void goToPage(String path, Integer value) {
+    if (getCurrentActivity() != null) {
+      final Book book = new Book(path.hashCode(), Collections.singletonList(path), null, null, null);
+      if ((new TextInterface(getCurrentActivity())).readMetainfo(book)) {
+        try {
+          TextWidget textWidget = null;
+          TextWidget currentWidget = FBReaderViewManager.getCurrentWidget();
+          if (currentWidget != null) {
+            Book currentBook = currentWidget.book();
+            if (currentBook != null && currentBook.getId() == book.getId()) {
+              textWidget = currentWidget;
+            }
+          }
+
+          if (textWidget == null) {
+            textWidget = new TextWidgetImpl(getCurrentActivity());
+          }
+          textWidget.setBook(book);
+          textWidget.gotoPage(value);
+          textWidget.clearTextCaches();
+          textWidget.invalidate();
+          return;
+        } catch (Exception ignored) {}
+      }
     }
 
-    private static WritableMap toJSONObject(TOCTree tree, HashMap<Integer, Integer> pageMap) {
-        WritableMap map = Arguments.createMap();
-        if (tree.Text != null) {
-            map.putString("text", tree.Text);
-        }
+  }
 
-        if (tree.Reference != null) {
-            map.putInt("ref", tree.Reference);
-            if (pageMap.containsKey(tree.Reference)) {
-                map.putInt("page", pageMap.get(tree.Reference));
-            }
-        }
-
-        if (tree.hasChildren()) {
-            List<TOCTree> children = tree.subtrees();
-            WritableArray lst = Arguments.createArray();
-            for (TOCTree child : children) {
-                lst.pushMap(toJSONObject(child, pageMap));
-            }
-            map.putArray("children", lst);
-        }
-
-        return map;
+  private static WritableMap toJSONObject(TOCTree tree, HashMap < Integer, Integer > pageMap) {
+    WritableMap map = Arguments.createMap();
+    if (tree.Text != null) {
+      map.putString("text", tree.Text);
     }
+
+    if (tree.Reference != null) {
+      map.putInt("ref", tree.Reference);
+      if (pageMap.containsKey(tree.Reference)) {
+        map.putInt("page", pageMap.get(tree.Reference));
+      }
+    }
+
+    if (tree.hasChildren()) {
+      List < TOCTree > children = tree.subtrees();
+      WritableArray lst = Arguments.createArray();
+      for (TOCTree child: children) {
+        lst.pushMap(toJSONObject(child, pageMap));
+      }
+      map.putArray("children", lst);
+    }
+
+    return map;
+  }
 }
