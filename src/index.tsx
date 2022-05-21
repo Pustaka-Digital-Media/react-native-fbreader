@@ -30,6 +30,10 @@ class FBReaderImpl {
   async tableOfContents(book: string) {
     return await _FBReader.tableOfContents(book);
   }
+
+  goToPage(page: number) {
+    return _FBReader.goToPage(page)
+  }
 }
 
 export const FBReader = new FBReaderImpl();
