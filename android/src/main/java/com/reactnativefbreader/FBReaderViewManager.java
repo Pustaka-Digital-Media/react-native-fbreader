@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -146,6 +147,13 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implemen
             } catch (BookException e) {
             }
         }
+    }
+
+    @ReactMethod
+    public void goToPage(Integer value) {
+      textWidget.gotoPage(value);
+      textWidget.clearTextCaches();
+      textWidget.invalidate();
     }
 
     @Override
