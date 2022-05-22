@@ -31,8 +31,8 @@ class FBReaderImpl {
     return await _FBReader.tableOfContents(book);
   }
 
-  goToPage(page: number) {
-    return _FBReader.goToPage(page)
+  goToPage(path: string, page: number) {
+    return _FBReader.goToPage(path, page)
   }
 }
 
