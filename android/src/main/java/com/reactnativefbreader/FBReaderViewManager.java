@@ -89,6 +89,16 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implemen
         }
     }
 
+  @ReactProp(name = "textColor")
+    public void setTextColor(View view, String value) {
+        if (value != null && !value.isEmpty()) {
+            final ColorProfile profile = textWidget.colorProfile();
+            profile.text.setValue(value);
+            textWidget.clearTextCaches();
+            textWidget.invalidate();
+        }
+    }
+
     @ReactProp(name = "colorProfile")
     public void setColorProfile(View view, String value) {
         if (value != null && !value.isEmpty()) {
