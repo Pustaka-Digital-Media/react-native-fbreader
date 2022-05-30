@@ -1,15 +1,16 @@
 {
-	"background": "wallpapers/black.jpg",
-	"text": "#ffffff",
-	"hyperlink": "#3c8ed0",
+	"background": "wallpapers/hardpaper.jpg",
+	"fill": "tile",
+	"text": "#000000",
+	"hyperlink": "#3c8bff",
 	"hyperlink:visited": "#c88bff",
 	"selection:bg": "#5283c2",
 	"highlighting:bg": "#5283c2",
 	"highlighting:fg": null,
-	"footer:old": "#555555",
+	"footer:old": "#aaaaaa",
 	"footer:bg": "#444444",
 	"footer:active": "#bbbbbb",
 	"footer:inactive": "#777777",
-	"css": "invert",
-	"image:adjusting": "lighten"
+	"css": "use",
+	"image:adjusting": "darken"
 }
