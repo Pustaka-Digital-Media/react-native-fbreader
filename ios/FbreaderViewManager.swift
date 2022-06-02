@@ -2,21 +2,21 @@ import FBReaderSDK
 
 class TextBookDataHolderImpl: TextBookDataHolder {
   let book: Book
-  
+
   init(book: Book) {
     self.book = book
   }
 
   var position: TextPosition? = nil
-  
+
   func save(position: TextPosition, progress: RationalNumber) {
     self.position = position
   }
-  
+
   func highlightingStyle(_ id: Int) -> HighlightingStyle? {
     return HighlightingStyle(id: id, fgColor: nil, bgColor: 0xA00000, savedName: "Red", timestamp: 0)
   }
-  
+
   private var _bookmarks = [Bookmark]()
   func bookmarks(for modelId: String?) -> [Bookmark] {
     return self._bookmarks.filter {$0.modelId == modelId}
@@ -28,7 +28,7 @@ class TextBookDataHolderImpl: TextBookDataHolder {
   }
 
   var recentLocations = [TextLocation]()
-  
+
   func save(recentLocations: [TextLocation]) {
     self.recentLocations = recentLocations
   }
@@ -40,7 +40,7 @@ class FBReaderCoverViewManager: RCTViewManager {
   override func view() -> (FBReaderCoverView) {
     return FBReaderCoverView()
   }
-  
+
   @objc override static func requiresMainQueueSetup() -> Bool {
       return false
   }
@@ -75,7 +75,7 @@ class FBReaderViewManager: RCTViewManager {
     FBReaderView.setDefaults("wood", forKey: "night:textBgPattern")
     return FBReaderView()
   }
-  
+
   @objc override static func requiresMainQueueSetup() -> Bool {
       return false
   }
@@ -83,7 +83,11 @@ class FBReaderViewManager: RCTViewManager {
 
 class FBReaderView : UIView, TextWidgetDelegate {
   private var textWidget: TextWidget? = nil
-  
+
+  func onLongTap(_ pt: CGPoint) -> Bool {
+    return false
+  }
+
   override func layoutSublayers(of layer: CALayer) {
     super.layoutSublayers(of: layer)
     if let widget = getTextWidget() {
@@ -106,7 +110,7 @@ class FBReaderView : UIView, TextWidgetDelegate {
       }
     }
   }
-  
+
   @objc var background = "" {
     didSet {
       if let widget = getTextWidget() {
@@ -118,7 +122,7 @@ class FBReaderView : UIView, TextWidgetDelegate {
       }
     }
   }
-  
+
   @objc var colorProfile = "" {
     didSet {
       if let widget = getTextWidget() {
@@ -129,7 +133,7 @@ class FBReaderView : UIView, TextWidgetDelegate {
       }
     }
   }
-  
+
   @objc var fontSize = 10 {
     didSet {
       if let widget = getTextWidget() {
@@ -148,7 +152,7 @@ class FBReaderView : UIView, TextWidgetDelegate {
       }
     }
   }
-  
+
   @objc var tocReference = 0 {
     didSet {
       if let widget = getTextWidget() {
@@ -156,7 +160,7 @@ class FBReaderView : UIView, TextWidgetDelegate {
       }
     }
   }
-  
+
   @objc var page = 0 {
     didSet {
       if let widget = getTextWidget() {
@@ -164,7 +168,7 @@ class FBReaderView : UIView, TextWidgetDelegate {
       }
     }
   }
-  
+
   // MARK:- Private methods
   private func getTextWidget() -> TextWidget? {
     if textWidget == nil {
@@ -175,21 +179,21 @@ class FBReaderView : UIView, TextWidgetDelegate {
     }
     return textWidget
   }
-  
+
   static func getDocumentsDirectory() -> String {
     let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
     let documentsDirectory = paths[0]
     return documentsDirectory.path
   }
-  
+
   static func setDefaults(_ value: Int, forKey key: String) {
     UserDefaults.standard.set(value, forKey: key)
   }
-  
+
   static func setDefaults(_ value: String, forKey key: String) {
     UserDefaults.standard.set(value, forKey: key)
   }
-  
+
   static func setDefaults(_ value: Bool, forKey key: String) {
     UserDefaults.standard.set(value, forKey: key)
   }
@@ -204,37 +208,37 @@ class FBReaderView : UIView, TextWidgetDelegate {
       }
     }
   }
-  
+
   func onSelectionChanged(_ pt: CGPoint) {
   }
-  
+
   func onSelectionCleared() {
   }
 
   func hidePopupElements() -> Bool {
     return false
   }
-  
+
   func followFootnote(id: String, sourceRect: CGRect, openFootnoteHandler: @escaping (() -> Void)) {
   }
-  
+
   func onFootnoteShown() {
   }
-  
+
   func onCreated(bookmark: Bookmark, in rect: CGRect) {
   }
-  
+
   func onTouched(bookmark: Bookmark, in rect: CGRect) {
   }
-  
+
   func onLongTouchInVoiceOverMode() {
   }
-  
+
   func openSelectionMenu(_ pt: CGPoint) {
   }
-  
+
   func createDataHolder(book: Book) -> TextBookDataHolder {
     return TextBookDataHolderImpl(book: book)
   }
-  
+
 }
