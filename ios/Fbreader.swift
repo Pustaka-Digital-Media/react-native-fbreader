@@ -2,7 +2,7 @@ import FBReaderSDK
 
 @objc(FBReader)
 class FBReader: NSObject {
-  
+
   @objc static func requiresMainQueueSetup() -> Bool {
       return false
   }
@@ -29,7 +29,16 @@ class FBReader: NSObject {
       }
     }
   }
-  
+
+  @objc(tableOfContents:withResolver:withRejecter:)
+  func tableOfContents(page: Int) -> Void {
+    textWidget = TextWidget()
+    textWidget?.delegate = self
+    textWidget?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    addSubview(textWidget!)
+    textWidget.goto(pageNo: page)
+  }
+
   func toMap(node: ToCTree?, widget: TextWidget) -> [String: Any] {
     var map = [String: Any]()
     if let title = node?.title, let ref = node?.reference {
@@ -37,7 +46,7 @@ class FBReader: NSObject {
       map["ref"] = ref
       map["page"] = widget.pageNo(for: ref + 1, in:.main)
     }
-    
+
     if let children = node?.children {
       var lst = [Dictionary<String, Any>]()
       for child in children {
