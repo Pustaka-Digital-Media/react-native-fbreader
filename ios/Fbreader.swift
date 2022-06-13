@@ -30,14 +30,14 @@ class FBReader: NSObject {
     }
   }
 
-  @objc(tableOfContents:withResolver:withRejecter:)
-  func tableOfContents(page: Int) -> Void {
-    textWidget = TextWidget()
-    textWidget?.delegate = self
-    textWidget?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-    addSubview(textWidget!)
-    textWidget.goto(pageNo: page)
-  }
+  // @objc(tableOfContents:withResolver:withRejecter:)
+  // func tableOfContents(page: Int) -> Void {
+  //   textWidget = TextWidget()
+  //   textWidget?.delegate = self
+  //   textWidget?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+  //   addSubview(textWidget!)
+  //   textWidget.goto(pageNo: page)
+  // }
 
   func toMap(node: ToCTree?, widget: TextWidget) -> [String: Any] {
     var map = [String: Any]()
