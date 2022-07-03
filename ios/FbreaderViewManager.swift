@@ -73,7 +73,9 @@ class FBReaderViewManager: RCTViewManager {
     Options.loadDefaults()
     FBReaderView.setDefaults("day", forKey: "colorProfile")
     FBReaderView.setDefaults("wood", forKey: "night:textBgPattern")
-    return FBReaderView()
+    let view = FBReaderView()
+    view.setEventDispatcher(eventDispatcher: self.bridge.eventDispatcher())
+    return view
   }
 
   @objc override static func requiresMainQueueSetup() -> Bool {
@@ -83,6 +85,20 @@ class FBReaderViewManager: RCTViewManager {
 
 class FBReaderView : UIView, TextWidgetDelegate {
   private var textWidget: TextWidget? = nil
+  private var eventDispatcher: RCTEventDispatcher? = nil
+
+  deinit {
+    NotificationCenter.default.removeObserver(self)
+  }
+
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    NotificationCenter.default.addObserver(self, selector: #selector(self.pageTurnedCallback(_:)), name: TextWidget.PageTurnedNotificationName, object: nil)
+  }
+
+  required init?(coder: NSCoder) {
+    super.init(coder: coder)
+  }
 
   func onLongTap(_ pt: CGPoint) -> Bool {
     return false
@@ -168,6 +184,10 @@ class FBReaderView : UIView, TextWidgetDelegate {
       }
     }
   }
+  
+  func setEventDispatcher(eventDispatcher: RCTEventDispatcher) {
+    self.eventDispatcher = eventDispatcher
+  }
 
   // MARK:- Private methods
   private func getTextWidget() -> TextWidget? {
@@ -178,6 +198,17 @@ class FBReaderView : UIView, TextWidgetDelegate {
       addSubview(textWidget!)
     }
     return textWidget
+  }
+  
+  @objc func pageTurnedCallback(_ notification: Notification?) {
+    if let widget = getTextWidget() {
+      var map = [String:Int]()
+      if let page = widget.pageInText {
+        map["total"] = page.total
+        map["page"] = page.pageNo
+        self.eventDispatcher?.sendDeviceEvent(withName: "FBReaderViewContentUpdateEvent", body: map)
+      }
+    }
   }
 
   static func getDocumentsDirectory() -> String {
