@@ -128,7 +128,7 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implemen
 
     @ReactProp(name = "page")
     public void setPage(View view, Integer value) {
-        if (value != null) {
+        if (value != null && value > 0) {
             textWidget.gotoPage(value);
             textWidget.clearTextCaches();
             textWidget.invalidate();

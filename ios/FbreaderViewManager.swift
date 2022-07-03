@@ -179,8 +179,10 @@ class FBReaderView : UIView, TextWidgetDelegate {
 
   @objc var page = 0 {
     didSet {
-      if let widget = getTextWidget() {
-        let _ = widget.goto(pageNo: page)
+      if (page > 0) {
+        if let widget = getTextWidget() {
+          let _ = widget.goto(pageNo: page)
+        }
       }
     }
   }
