@@ -5,7 +5,7 @@ RN plugin for FBReader SDK
 ## Installation
 
 ```sh
-npm install bakhtiyork/react-native-fbreader
+npm install Pustaka-Digital-Media/react-native-fbreader
 ```
 
 ## Usage
