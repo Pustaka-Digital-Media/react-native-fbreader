@@ -151,6 +151,17 @@ class FBReaderView : UIView, TextWidgetDelegate {
     }
   }
 
+  @objc var textColor = "black" {
+    didSet {
+      if let widget = getTextWidget() {
+        ReadingColorProfile.current.text = UIColor.textColor
+        widget.forceUpdateTextParams()
+        widget.rebuildPaintInfo()
+        widget.setNeedsDisplay()
+      }
+    }
+  }
+
   @objc var fontSize = 10 {
     didSet {
       if let widget = getTextWidget() {
