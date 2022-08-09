@@ -71,7 +71,7 @@ class FBReaderViewManager: RCTViewManager {
 
   override func view() -> (FBReaderView) {
     Options.loadDefaults()
-    FBReaderView.setDefaults("day", forKey: "colorProfile")
+    // FBReaderView.setDefaults("day", forKey: "colorProfile")
     FBReaderView.setDefaults("wood", forKey: "night:textBgPattern")
     let view = FBReaderView()
     view.setEventDispatcher(eventDispatcher: self.bridge.eventDispatcher())
@@ -186,7 +186,7 @@ class FBReaderView : UIView, TextWidgetDelegate {
       }
     }
   }
-  
+
   func setEventDispatcher(eventDispatcher: RCTEventDispatcher) {
     self.eventDispatcher = eventDispatcher
   }
@@ -201,7 +201,7 @@ class FBReaderView : UIView, TextWidgetDelegate {
     }
     return textWidget
   }
-  
+
   @objc func pageTurnedCallback(_ notification: Notification?) {
     if let widget = getTextWidget() {
       var map = [String:Int]()
