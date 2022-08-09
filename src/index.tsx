@@ -8,6 +8,7 @@ type FBReaderViewProps = {
   colorProfile?: string;
   fontSize?: number;
   searchInText?: string;
+  textColor?: string;
   tocReference?: number;
   page?: number;
   style?: ViewStyle;
