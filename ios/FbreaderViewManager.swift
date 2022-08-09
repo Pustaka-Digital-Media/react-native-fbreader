@@ -73,6 +73,7 @@ class FBReaderViewManager: RCTViewManager {
     Options.loadDefaults()
     // FBReaderView.setDefaults("day", forKey: "colorProfile")
     FBReaderView.setDefaults("wood", forKey: "night:textBgPattern")
+    ReadingColorProfile.current.text = UIColor.black
     let view = FBReaderView()
     view.setEventDispatcher(eventDispatcher: self.bridge.eventDispatcher())
     return view
