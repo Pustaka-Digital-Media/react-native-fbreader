@@ -75,7 +75,7 @@ class FBReaderViewManager: RCTViewManager {
     FBReaderView.setDefaults("wood", forKey: "night:textBgPattern")
     ReadingColorProfile.current.text = UIColor.black
     let view = FBReaderView()
-    view.setEventDispatcher(eventDispatcher: self.bridge.eventDispatcher())
+      view.setEventDispatcher(eventDispatcher: self.bridge.eventDispatcher() as! RCTEventDispatcher)
     return view
   }
 
@@ -154,7 +154,12 @@ class FBReaderView : UIView, TextWidgetDelegate {
   @objc var textColor = "black" {
     didSet {
       if let widget = getTextWidget() {
-        ReadingColorProfile.current.text = UIColor.textColor
+        if (textColor == "white") {
+            ReadingColorProfile.current.text = UIColor.white
+        }
+        else {
+            ReadingColorProfile.current.text = UIColor.black
+        }
         widget.forceUpdateTextParams()
         widget.rebuildPaintInfo()
         widget.setNeedsDisplay()
