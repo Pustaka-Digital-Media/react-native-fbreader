@@ -11,6 +11,5 @@
 	"footer:bg": "#444444",
 	"footer:active": "#bbbbbb",
 	"footer:inactive": "#777777",
-	"css": "use",
-	"image:adjusting": "darken"
+	"css": "use"
 }
