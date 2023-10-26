@@ -18,11 +18,11 @@ def safeExtGet(prop, fallback) {
 }
 
 android {
-    compileSdkVersion safeExtGet('Fbreader_compileSdkVersion', 29)
-    buildToolsVersion safeExtGet('Fbreader_buildToolsVersion', '29.0.2')
+    compileSdkVersion safeExtGet('Fbreader_compileSdkVersion', 33)
+    buildToolsVersion safeExtGet('Fbreader_buildToolsVersion', '31.0.0')
     defaultConfig {
-        minSdkVersion safeExtGet('Fbreader_minSdkVersion', 16)
-        targetSdkVersion safeExtGet('Fbreader_targetSdkVersion', 29)
+        minSdkVersion safeExtGet('Fbreader_minSdkVersion', 21)
+        targetSdkVersion safeExtGet('Fbreader_targetSdkVersion', 33)
         versionCode 1
         versionName "1.0"
 
