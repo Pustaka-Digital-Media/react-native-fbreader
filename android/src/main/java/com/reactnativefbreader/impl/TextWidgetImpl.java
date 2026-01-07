@@ -17,11 +17,6 @@ import org.fbreader.widget.GestureListener;
 
 public class TextWidgetImpl extends TextWidget {
 
-    public interface TextWidgetListener {
-        void onContentUpdated(WritableMap map);
-    }
-
-    private TextWidgetListener textWidgetListener;
 
     public TextWidgetImpl(Context context) {
         super(context);
@@ -42,30 +37,33 @@ public class TextWidgetImpl extends TextWidget {
     @Override
     public void onContentUpdated() {
         super.onContentUpdated();
-        TextWidgetListener textWidgetListener = getTextWidgetListener();
-        if (textWidgetListener != null) {
-            WritableMap map = Arguments.createMap();
-            PageInText page = pageInText();
-            if (page != null) {
-                map.putInt("page", page.pageNo);
-                map.putInt("total", page.total);
-            }
-            if (currentTOCElement() != null) {
-                WritableArray breadcrumbs = Arguments.createArray();
-                storeBreadcrumbs(currentTOCElement(), breadcrumbs);
-                map.putArray("chapter", breadcrumbs);
-            }
-            textWidgetListener.onContentUpdated(map);
+        WritableMap map = Arguments.createMap();
+        PageInText page = pageInText();
+        if (page != null) {
+            map.putInt("page", page.pageNo);
+            map.putInt("total", page.total);
+        }
+        if (currentTOCElement() != null) {
+            WritableArray breadcrumbs = Arguments.createArray();
+            storeBreadcrumbs(currentTOCElement(), breadcrumbs);
+            map.putArray("chapter", breadcrumbs);
+        }
+        
+        try {
+            ((com.facebook.react.bridge.ReactContext) getContext())
+                    .getJSModule(com.facebook.react.modules.core.DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                    .emit("FBReaderViewContentUpdateEvent", map);
+        } catch (Exception e) {
+            // Context might not be ready yet
         }
     }
 
-    public TextWidgetListener getTextWidgetListener() {
-        return textWidgetListener;
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        onContentUpdated();
     }
 
-    public void setTextWidgetListener(TextWidgetListener textWidgetListener) {
-        this.textWidgetListener = textWidgetListener;
-    }
 
     private void storeBreadcrumbs(TOCTree tree, WritableArray storage) {
         WritableMap item = Arguments.createMap();
