@@ -211,8 +211,6 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implemen
                     Log.e("FBReaderViewManager", "Could not hide footer", e);
                 }
 
-                // Reset to system brightness by default
-                textWidget.setScreenBrightness(-1, true);
 
                 // Ensure layout is ready before invalidating to fix 0/0 page issue
                 layout.post(new Runnable() {
