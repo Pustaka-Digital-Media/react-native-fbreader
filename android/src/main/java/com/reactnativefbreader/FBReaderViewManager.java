@@ -169,6 +169,15 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implemen
         }
     }
 
+    @ReactProp(name = "brightness")
+    public void setBrightness(View view, Integer value) {
+        if (value != null && view instanceof FrameLayout) {
+            TextWidgetImpl textWidget = getTextWidget((FrameLayout) view);
+            if (textWidget == null) return;
+            textWidget.setScreenBrightness(value, true);
+        }
+    }
+
     @ReactProp(name = "book")
     public void setBook(View view, final String value) {
         if (value == null || value.isEmpty() || !(view instanceof FrameLayout)) {
@@ -202,9 +211,9 @@ public class FBReaderViewManager extends SimpleViewManager<FrameLayout> implemen
                     Log.e("FBReaderViewManager", "Could not hide footer", e);
                 }
 
-                // Ensure no dimming from native side
-                textWidget.setScreenBrightness(100, true);
-                
+                // Reset to system brightness by default
+                textWidget.setScreenBrightness(-1, true);
+
                 // Ensure layout is ready before invalidating to fix 0/0 page issue
                 layout.post(new Runnable() {
                     @Override

@@ -33,7 +33,7 @@ public class GestureListenerImpl extends GestureListenerBase {
     }
 
     protected boolean isBrightnessAdjustmentEnabled() {
-        return true;
+        return false;
     }
 
     /* +++++++ TOUCH EVENTS +++++++ */
